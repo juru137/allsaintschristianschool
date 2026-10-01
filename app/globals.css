@@ -1,0 +1,212 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --bg: 247 249 253;
+  --fg: 20 35 54;
+  --card: 255 255 255;
+  --muted: 91 108 129;
+  --border: 220 229 239;
+  --accent: 0 71 170;
+  --accent-fill: 0 71 170;
+  --accent-secondary: 196 4 4;
+  --brand: 0 52 112;
+}
+.dark {
+  color-scheme: dark;
+  --bg: 9 19 33;
+  --fg: 237 243 250;
+  --card: 18 32 51;
+  --muted: 164 180 200;
+  --border: 42 59 82;
+  --accent: 126 182 245;
+  --accent-fill: 0 71 170;
+  --accent-secondary: 255 112 112;
+  --brand: 5 31 63;
+}
+
+html { scroll-behavior: smooth; }
+a, button:not(:disabled), [role="button"], summary, input[type="submit"] { cursor: pointer; }
+button:disabled, input:disabled, select:disabled { cursor: not-allowed; }
+.utility-bar { isolation: isolate; }
+.utility-bar::after {
+  position: absolute;
+  z-index: 1;
+  inset: auto 0 0;
+  height: 2px;
+  background: linear-gradient(90deg, #ff3b5c, #ffc847, #4be0a4, #48baff, #cb64ff, #ff3b5c);
+  background-size: 300% 100%;
+  content: "";
+  animation: utilityEdgeRoll 5s linear infinite;
+  pointer-events: none;
+}
+@keyframes utilityEdgeRoll {
+  to { background-position: 300% 0; }
+}
+body {
+  background: rgb(var(--bg));
+  color: rgb(var(--fg));
+  font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+  transition: background-color .3s ease, color .3s ease;
+}
+h1, h2, h3 {
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+@keyframes shimmer {
+  0% { background-position: -800px 0; }
+  100% { background-position: 800px 0; }
+}
+.shimmer {
+  background: linear-gradient(90deg, rgb(var(--border)/.3) 0%, rgb(var(--border)/.6) 50%, rgb(var(--border)/.3) 100%);
+  background-size: 800px 100%;
+  animation: shimmer 1.6s linear infinite;
+}
+
+.btn-red-sweep {
+  background-image: linear-gradient(rgb(197 4 4 / .2), rgb(197 4 4 / .2));
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 0 100%;
+  transition: background-size .4s ease, transform .2s ease, box-shadow .2s ease;
+}
+.btn-red-sweep:hover { background-size: 100% 100%; }
+
+@property --leadership-edge-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+@keyframes leadershipEdgeRun {
+  to { --leadership-edge-angle: 360deg; }
+}
+.leadership-card {
+  position: relative;
+  isolation: isolate;
+  transition: transform .45s cubic-bezier(.2,.75,.25,1), box-shadow .45s ease, border-color .45s ease;
+}
+.leadership-card::before {
+  position: absolute;
+  z-index: 1;
+  inset: -1px;
+  padding: 2px;
+  border-radius: inherit;
+  background: conic-gradient(from var(--leadership-edge-angle), transparent 0deg 235deg, #ff4057 260deg, #21d4fd 295deg, #b4ff39 330deg, transparent 360deg);
+  content: "";
+  opacity: 0;
+  transition: opacity .3s ease;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+.leadership-card:hover {
+  z-index: 1;
+  transform: translateY(-6px) scale(1.025);
+  border-color: transparent;
+  box-shadow: 0 18px 34px -18px rgb(0 0 0 / .42);
+}
+.leadership-card:hover::before {
+  opacity: 1;
+  animation: leadershipEdgeRun 2.4s linear infinite;
+}
+
+.nav-underline { position: relative; }
+.nav-underline::after {
+  content: ""; position: absolute; left: 0; bottom: -4px;
+  height: 2px; width: 100%;
+  background: rgb(var(--accent-secondary));
+  transform: scaleX(0); transform-origin: right;
+  transition: transform .35s cubic-bezier(.65,.05,.36,1);
+}
+.nav-underline:hover::after,
+.nav-underline[data-active="true"]::after {
+  transform: scaleX(1); transform-origin: left;
+}
+
+@keyframes heroZoom {
+  from { transform: scale(1.05); }
+  to { transform: scale(1.18); }
+}
+.hero-zoom { animation: heroZoom 20s ease-in-out infinite alternate; }
+
+.btn-pop { transition: transform .2s ease, box-shadow .2s ease, background-color .2s ease; }
+.btn-pop:hover { transform: translateY(-2px); box-shadow: 0 10px 20px -8px rgb(0 0 0 / .35); }
+.btn-pop:active { transform: translateY(0); }
+
+@keyframes floatUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.float-up { animation: floatUp .6s ease both; }
+
+.scroll-reveal-pending {
+  opacity: 0;
+  transform: translate3d(0, 24px, 0) scale(.985);
+}
+.scroll-reveal-in {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+  transition: opacity .65s ease var(--reveal-delay, 0ms), transform .65s cubic-bezier(.2,.75,.25,1) var(--reveal-delay, 0ms);
+}
+.card-lift {
+  transition: transform .3s cubic-bezier(.2,.75,.25,1), box-shadow .3s ease, border-color .3s ease;
+}
+.card-lift:hover {
+  transform: translateY(-5px);
+  border-color: rgb(var(--accent) / .55);
+  box-shadow: 0 16px 32px -20px rgb(0 0 0 / .45);
+}
+
+@keyframes scrollCue {
+  0%, 100% { transform: translateY(-2px); }
+  50% { transform: translateY(5px); }
+}
+.scroll-cue { animation: scrollCue 1s ease-in-out infinite; }
+
+@keyframes storyProgress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+.story-progress-fill {
+  transform-origin: left;
+  animation: storyProgress 7s linear forwards;
+}
+
+@keyframes gradientShift {
+  0%,100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.gradient-shift {
+  background-size: 200% 200%;
+  animation: gradientShift 12s ease infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .scroll-reveal-pending,
+  .scroll-reveal-in {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .scroll-cue { animation: none; }
+  .card-lift { transition: none; }
+  .leadership-card, .leadership-card::before { transition: none; animation: none; }
+  .leadership-card:hover { transform: none; }
+  .btn-red-sweep { transition: none; }
+  .utility-bar::after { animation: none; }
+  .story-progress-fill { animation: none; transform: scaleX(1); }
+}
+
+@layer utilities {
+  .line-clamp-2 {
+    display: -webkit-box;
+    line-clamp: 2;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
